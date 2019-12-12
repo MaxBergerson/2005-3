@@ -90,7 +90,7 @@
 </div>
 <div class='col-sm-3'>
 <h2>Vegetable</h2>
-<ul id="vegetabble">
+<ul id="vegetable">
 </ul>
 </div>
 <div class='col-sm-3'>
@@ -124,23 +124,37 @@ createItem("lettuce", "vegetable");
 function addItemsToMain() {
   console.log("items called", items);
   for (let i = 0; i < items.length; i++) {
-    const taskList = document.getElementById("main")
+    const taskList = document.getElementById("main");
     const newLI = document.createElement("li");
+    newLI.setAttribute("data-id", i);
     newLI.appendChild(document.createTextNode(items[i].name));
     taskList.appendChild(newLI);
   }
 }
 addItemsToMain();
-
+function doOnEnd(e) {
+  const column = e.to.id;
+  const item = e.item.getAttribute("data-id");
+  items[item].column = column;
+  let score = 0;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].category === items[i].column) {
+      score = score + 1;
+    }
+  }
+  console.log("score:", score);
+  document.getElementById("score").textContent = score;
+}
 new Sortable(main, {
   animation: 150,
   ghostClass: "dragClass",
   group: {
     name: "r1",
-    put: true,
+    put: true
   },
   sort: false,
-  swapThreshold: 1
+  swapThreshold: 1,
+  onEnd: doOnEnd
 });
 
 new Sortable(animal, {
@@ -150,21 +164,24 @@ new Sortable(animal, {
     name: "r1",
     put: true
   },
-  swapThreshold: 1
+  swapThreshold: 1,
+  onEnd: doOnEnd
 });
 
 new Sortable(vegetable, {
   animation: 150,
   ghostClass: "dragClass",
   group: "r1",
-  swapThreshold: 1
+  swapThreshold: 1,
+  onEnd: doOnEnd
 });
 
 new Sortable(mineral, {
   animation: 150,
   ghostClass: "dragClass",
   group: "r1",
-  swapThreshold: 1
+  swapThreshold: 1,
+  onEnd: doOnEnd
 });
     </script>
 </body>
